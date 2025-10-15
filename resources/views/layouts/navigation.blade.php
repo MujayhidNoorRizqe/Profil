@@ -71,7 +71,11 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
-
+    @if(Auth::user()->role == 'admin')
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            {{ __('Admin Panel') }}
+                        </x-nav-link>
+                    @endif
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
