@@ -5,8 +5,8 @@
     <div class="colorlib-narrow-content">
         <div class="row">
             <div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-                <span class="heading-meta">My Work</span>
-                <h2 class="colorlib-heading">Our Work</h2>
+                <span class="heading-meta">Projek</span>
+                <h2 class="colorlib-heading">Melayani Pembuatan</h2>
             </div>
         </div>
         <div class="row row-bottom-padded-md">
@@ -14,8 +14,8 @@
                 <div class="project" style="background-image: url({{ asset('template/images/img-1.jpg') }});">
                     <div class="desc">
                         <div class="con">
-                            <h3><a href="#">Work 01</a></h3>
-                            <span>Building</span>
+                            <h3><a href="#">Outdoor</a></h3>
+                            <span>Lorem ipsum dolor sit amet</span>
                         </div>
                     </div>
                 </div>
@@ -24,8 +24,8 @@
                 <div class="project" style="background-image: url({{ asset('template/images/img-2.jpg') }});">
                     <div class="desc">
                         <div class="con">
-                            <h3><a href="#">Work 02</a></h3>
-                            <span>House, Apartment</span>
+                            <h3><a href="#">Indoor</a></h3>
+                            <span>Lorem ipsum dolor sit amet</span>
                         </div>
                     </div>
                 </div>
@@ -34,8 +34,8 @@
                 <div class="project" style="background-image: url({{ asset('template/images/img-3.jpg') }});">
                     <div class="desc">
                         <div class="con">
-                            <h3><a href="#">Work 03</a></h3>
-                            <span>Dining Room</span>
+                            <h3><a href="#">Multi</a></h3>
+                            <span>Lorem ipsum dolor sit amet</span>
                         </div>
                     </div>
                 </div>
