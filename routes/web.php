@@ -4,15 +4,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\ProfileController; // Breeze menggunakan ini
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ProjectController; // <-- TAMBAHKAN INI
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Di sinilah Anda bisa mendaftarkan web route untuk aplikasi Anda.
-|
 */
 
 // == HALAMAN PUBLIK ==
@@ -38,9 +36,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // == HALAMAN KHUSUS ADMIN ==
-    // Dilindungi oleh middleware 'admin' yang sudah kita buat
-    Route::middleware('admin')->group(function () {
-        Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    // Grup ini memiliki prefix URL '/admin' dan nama route 'admin.'
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // === TAMBAHKAN ROUTE INI UNTUK PROYEK ===
+        // Ini akan secara otomatis membuat route seperti:
+        // admin.projects.index, admin.projects.create, admin.projects.store, dll.
+        Route::resource('projects', ProjectController::class);
     });
 });
 
