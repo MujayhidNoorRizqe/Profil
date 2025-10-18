@@ -1,11 +1,13 @@
 <?php
 
-// app/Models/Project.php
+// app/Models/Message.php
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model {
+class Message extends Model {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'status'];
+
+    protected $fillable = ['name', 'email', 'message', 'is_read'];
 }

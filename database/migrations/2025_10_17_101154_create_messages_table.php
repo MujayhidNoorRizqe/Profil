@@ -1,21 +1,22 @@
 <?php
 
-// database/migrations/2025_10_17_000001_create_projects_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->string('status')->default('active');
+            $table->string('name');
+            $table->string('email');
+            $table->text('message');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
+
     public function down(): void {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('messages');
     }
 };

@@ -1,11 +1,13 @@
 <?php
 
-// app/Models/Project.php
+// app/Models/Visitor.php
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model {
+class Visitor extends Model {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'status'];
+
+    protected $fillable = ['ip_address'];
 }
