@@ -1,54 +1,53 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Edit Proyek: {{ $project->title }}</h5>
+<div class="card">
+    <div class="card-header">Edit Proyek</div>
+    <div class="card-body">
+        <form action="{{ route('admin.projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-3">
+                <label>Judul</label>
+                <input type="text" name="title" class="form-control" value="{{ $project->title }}" required>
             </div>
-            <div class="card-body">
-                <form action="{{ route('admin.projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT') {{-- Metode HTTP untuk proses Update --}}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label" for="title">Judul Proyek</label>
-                                <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $project->title) }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label" for="category">Kategori</label>
-                                <input type="text" class="form-control" id="category" name="category" value="{{ old('category', $project->category) }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label" for="description">Deskripsi</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" required>{{ old('description', $project->description) }}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label" for="image">Ganti Gambar Proyek (Opsional)</label>
-                                <input class="form-control" type="file" id="image" name="image">
-                                <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengganti gambar.</small>
-                                @if($project->image)
-                                    <div class="mt-2">
-                                        <p>Gambar Saat Ini:</p>
-                                        <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" width="150">
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                    <a href="{{ route('admin.projects.index') }}" class="btn btn-light">Batal</a>
-                </form>
+
+            <div class="mb-3">
+                <label>Kategori</label>
+                <input type="text" name="category" class="form-control" value="{{ $project->category }}">
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label>Deskripsi</label>
+                <textarea name="description" class="form-control" rows="4">{{ $project->description }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Gambar Saat Ini</label><br>
+                @if($project->image)
+                    <img src="{{ asset('storage/' . $project->image) }}" width="150" class="mb-3 rounded">
+                @else
+                    <p>Tidak ada gambar</p>
+                @endif
+                <input type="file" name="image" id="image" class="form-control">
+                <img id="preview" class="mt-2 rounded" width="200" style="display:none;">
+            </div>
+
+            <button type="submit" class="btn btn-success">Update</button>
+        </form>
     </div>
 </div>
+
+<script>
+document.getElementById('image').addEventListener('change', function(e){
+    const reader = new FileReader();
+    reader.onload = function(e){ 
+        const preview = document.getElementById('preview');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+    }
+    reader.readAsDataURL(e.target.files[0]);
+});
+</script>
 @endsection

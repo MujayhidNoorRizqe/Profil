@@ -6,70 +6,55 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Project;
 use App\Models\About;
+use App\Models\Service; // ✅ Tambah model Service
 
 class PageController extends Controller
 {
-    /**
-     * Menampilkan halaman Home/Profil.
-     */
     public function home(): View
     {
         return view('profile');
     }
 
-    /**
-     * Menampilkan halaman Project dengan data dari database.
-     */
     public function project(): View
     {
-        $projects = Project::latest()->get();
+        $projects = Project::latest()->paginate(6);
         return view('project', compact('projects'));
     }
 
-    /**
-     * Menampilkan halaman About dengan data dari database.
-     */
     public function about(): View
     {
-        // Ambil data pertama dari tabel 'abouts', jika tidak ada tampilkan fallback
         $about = About::first() ?? new About([
             'title' => 'Who We Are',
             'description' => 'Deskripsi belum tersedia. Silakan tambahkan dari panel admin.',
             'image' => 'images/template/default-about.jpg',
-            'counter1_value' => 0,
+            'counter1_value' => 1370,
             'counter1_label' => 'Projects',
-            'counter2_value' => 0,
+            'counter2_value' => 3251,
             'counter2_label' => 'Employees',
-            'counter3_value' => 0,
+            'counter3_value' => 5328,
             'counter3_label' => 'Constructor',
-            'counter4_value' => 0,
+            'counter4_value' => 3559,
             'counter4_label' => 'Partners',
         ]);
 
-        return view('about', compact('about'));
+        return view('partials.about', compact('about'));
     }
 
-    /**
-     * Menampilkan halaman Services.
-     */
     public function services(): View
     {
-        return view('services');
+        // ✅ Ambil data dari database langsung
+        $services = Service::orderBy('id', 'desc')->get();
+        $categories = ['Semua', 'Outdoor', 'Indoor', 'Multi'];
+        return view('partials.services', compact('services', 'categories'));
     }
 
-    /**
-     * Menampilkan halaman Blog.
-     */
     public function blog(): View
     {
-        return view('blog');
+        return view('partials.blog');
     }
 
-    /**
-     * Menampilkan halaman Contact.
-     */
     public function contact(): View
     {
-        return view('contact');
+        return view('partials.contact');
     }
 }

@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Service extends Model
 {
-    use HasFactory;
+    protected $table = 'services';
 
     protected $fillable = [
         'title',
-        'category',
         'description',
+        'icon',
         'image',
+        'category',
     ];
 }

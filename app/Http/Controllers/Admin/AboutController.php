@@ -22,6 +22,8 @@ class AboutController extends Controller
                 'title' => 'Tentang Kami',
                 'description' => 'Isi deskripsi singkat perusahaan Anda di sini.',
                 'image' => 'images/template/default-about.jpg',
+                'hero_image' => 'images/template/default-hero.jpg',
+                'counter_bg' => 'images/template/default-counter-bg.jpg',
                 'counter1_value' => 0,
                 'counter1_label' => 'Projects',
                 'counter2_value' => 0,
@@ -41,13 +43,18 @@ class AboutController extends Controller
      */
     public function update(Request $request)
     {
-        $about = About::firstOrFail();
+        $about = About::first() ?? new About();
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
+            // Gambar
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            'counter_bg' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:6144',
+            'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+            // Counter
             'counter1_value' => 'nullable|integer|min:0',
             'counter1_label' => 'nullable|string|max:255',
             'counter2_value' => 'nullable|integer|min:0',
@@ -58,16 +65,32 @@ class AboutController extends Controller
             'counter4_label' => 'nullable|string|max:255',
         ]);
 
-        // Jika ada file baru, hapus gambar lama dan simpan baru
+        // Upload hero image (gambar di kiri)
+        if ($request->hasFile('hero_image')) {
+            if ($about->hero_image && Storage::disk('public')->exists($about->hero_image)) {
+                Storage::disk('public')->delete($about->hero_image);
+            }
+            $validated['hero_image'] = $request->file('hero_image')->store('abouts', 'public');
+        }
+
+        // Upload counter background (gambar belakang counter)
+        if ($request->hasFile('counter_bg')) {
+            if ($about->counter_bg && Storage::disk('public')->exists($about->counter_bg)) {
+                Storage::disk('public')->delete($about->counter_bg);
+            }
+            $validated['counter_bg'] = $request->file('counter_bg')->store('abouts', 'public');
+        }
+
+        // Upload image lama (fallback, jika masih dipakai)
         if ($request->hasFile('image')) {
             if ($about->image && $about->image !== 'images/template/default-about.jpg') {
                 Storage::disk('public')->delete($about->image);
             }
-
             $validated['image'] = $request->file('image')->store('abouts', 'public');
         }
 
-        $about->update($validated);
+        // Simpan semua perubahan
+        $about->fill($validated)->save();
 
         return redirect()
             ->route('admin.about.edit')
