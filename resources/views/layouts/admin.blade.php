@@ -55,11 +55,18 @@
                             <span class="pc-mtext">Kelola About</span>
                         </a>
                     </li>
-<!-- Kelola Services -->
+                    <!-- Kelola Services -->
                     <li class="pc-item {{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.services.index') }}" class="pc-link">
                             <span class="pc-micon"><i class="ph-duotone ph-wrench"></i></span>
                             <span class="pc-mtext">Kelola Services</span>
+                        </a>
+                    </li>
+                    <!-- Kelola Blog -->
+                    <li class="pc-item {{ request()->routeIs('admin.news.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.news.index') }}" class="pc-link">
+                            <span class="pc-micon"><i class="ph-duotone ph-newspaper"></i></span>
+                            <span class="pc-mtext">Kelola Blog</span>
                         </a>
                     </li>
                     <!-- Logout -->

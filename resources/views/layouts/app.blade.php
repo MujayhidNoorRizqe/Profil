@@ -12,26 +12,16 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- =======================================================
-         ORIGINAL COLORLIB TEMPLATE CSS (JANGAN DIHAPUS)
-    ======================================================= -->
+    <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('template/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('template/css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('template/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('template/css/flexslider.css') }}">
-    <link rel="stylesheet" href="{{ asset('template/fonts/flaticon/font/flaticon.css') }}">
     <link rel="stylesheet" href="{{ asset('template/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/css/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/css/style.css') }}">
-
-    <!-- Modernizr JS -->
-    <script src="{{ asset('template/js/modernizr-2.6.2.min.js') }}"></script>
-
-    <!-- Support IE9 below -->
-    <!--[if lt IE 9]>
-    <script src="{{ asset('template/js/respond.min.js') }}"></script>
-    <![endif]-->
 </head>
+
 <body>
 <div id="colorlib-page">
     <a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
@@ -44,64 +34,61 @@
 
         <nav id="colorlib-main-menu" role="navigation">
             <ul>
+                @php $isHome = request()->routeIs('home'); @endphp
+
                 <li class="{{ request()->routeIs('home') ? 'colorlib-active' : '' }}">
-                    <a href="{{ route('home') }}">HOME</a>
+                    <a href="{{ $isHome ? '#home' : route('home') }}" class="{{ $isHome ? 'js-scroll' : '' }}">HOME</a>
                 </li>
                 <li class="{{ request()->routeIs('project') ? 'colorlib-active' : '' }}">
-                    <a href="{{ route('project') }}">PROJECT</a>
+                    <a href="{{ $isHome ? '#project' : route('project') }}" class="{{ $isHome ? 'js-scroll' : '' }}">PROJECT</a>
                 </li>
                 <li class="{{ request()->routeIs('about') ? 'colorlib-active' : '' }}">
-                    <a href="{{ route('about') }}">ABOUT</a>
+                    <a href="{{ $isHome ? '#about' : route('about') }}" class="{{ $isHome ? 'js-scroll' : '' }}">ABOUT</a>
                 </li>
                 <li class="{{ request()->routeIs('services') ? 'colorlib-active' : '' }}">
-                    <a href="{{ route('services') }}">SERVICES</a>
+                    <a href="{{ $isHome ? '#services' : route('services') }}" class="{{ $isHome ? 'js-scroll' : '' }}">SERVICES</a>
                 </li>
                 <li class="{{ request()->routeIs('blog') ? 'colorlib-active' : '' }}">
-                    <a href="{{ route('blog') }}">BLOG</a>
+                    <a href="{{ $isHome ? '#blog' : route('blog') }}" class="{{ $isHome ? 'js-scroll' : '' }}">BLOG</a>
                 </li>
                 <li class="{{ request()->routeIs('contact') ? 'colorlib-active' : '' }}">
-                    <a href="{{ route('contact') }}">CONTACT</a>
+                    <a href="{{ $isHome ? '#contact' : route('contact') }}" class="{{ $isHome ? 'js-scroll' : '' }}">CONTACT</a>
                 </li>
             </ul>
         </nav>
 
         <div class="colorlib-footer">
-            <p>
-                <small>
-                    &copy; Copyright 
-                    <script>document.write(new Date().getFullYear());</script> 
-                    All rights reserved
-                </small>
-            </p>
-            <ul>
-                <li><a href="#"><i class="icon-facebook2"></i></a></li>
-                <li><a href="#"><i class="icon-twitter2"></i></a></li>
-                <li><a href="#"><i class="icon-instagram"></i></a></li>
-                <li><a href="#"><i class="icon-linkedin2"></i></a></li>
-            </ul>
+            <p><small>&copy; {{ date('Y') }} All rights reserved</small></p>
         </div>
     </aside>
-    <!-- ================== /SIDEBAR ================== -->
 
     <!-- ================== MAIN CONTENT ================== -->
     <div id="colorlib-main">
         @yield('content')
     </div>
-    <!-- ================== /MAIN CONTENT ================== -->
 </div>
 
-<!-- =======================================================
-     ORIGINAL COLORLIB JS
-======================================================= -->
+<!-- JS -->
 <script src="{{ asset('template/js/jquery.min.js') }}"></script>
-<script src="{{ asset('template/js/jquery.easing.1.3.js') }}"></script>
 <script src="{{ asset('template/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('template/js/jquery.waypoints.min.js') }}"></script>
 <script src="{{ asset('template/js/jquery.flexslider-min.js') }}"></script>
-<script src="{{ asset('template/js/sticky-kit.min.js') }}"></script>
 <script src="{{ asset('template/js/owl.carousel.min.js') }}"></script>
 <script src="{{ asset('template/js/jquery.countTo.js') }}"></script>
 <script src="{{ asset('template/js/main.js') }}"></script>
 
+<script>
+    // Smooth scroll hanya aktif di halaman HOME
+    document.addEventListener('click', function(e) {
+        const a = e.target.closest('a.js-scroll');
+        if (!a) return;
+        const href = a.getAttribute('href') || '';
+        if (href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            target && target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+</script>
 </body>
 </html>

@@ -7,20 +7,26 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\PageController;
 
-// -------------------------
-// HALAMAN PUBLIK
-// -------------------------
-Route::get('/', [App\Http\Controllers\PageController::class, 'home'])->name('home');
-Route::get('/project', [App\Http\Controllers\PageController::class, 'project'])->name('project');
-Route::get('/about', [App\Http\Controllers\PageController::class, 'about'])->name('about');
-Route::get('/services', [App\Http\Controllers\PageController::class, 'services'])->name('services');
-Route::get('/blog', [App\Http\Controllers\PageController::class, 'blog'])->name('blog');
-Route::get('/contact', [App\Http\Controllers\PageController::class, 'contact'])->name('contact');
+// ======================================================
+// 🔹 HALAMAN PUBLIK (FRONTEND)
+// ======================================================
+Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/project', [PageController::class, 'project'])->name('project');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/services', [PageController::class, 'services'])->name('services');
 
-// -------------------------
-// LOGIN / REGISTER ADMIN
-// -------------------------
+// Blog utama & detail
+Route::get('/blog', [PageController::class, 'blog'])->name('blog');
+Route::get('/blog/{slug}', [PageController::class, 'blogDetail'])->name('blog.detail');
+
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+
+// ======================================================
+// 🔹 LOGIN / REGISTER ADMIN
+// ======================================================
 Route::middleware('guest')->group(function () {
     Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('admin.login');
     Route::post('/admin/login', [AuthController::class, 'login']);
@@ -28,28 +34,38 @@ Route::middleware('guest')->group(function () {
     Route::post('/admin/register', [AuthController::class, 'register']);
 });
 
+// Redirect default Laravel login ke admin login
 Route::get('/login', fn() => redirect()->route('admin.login'))->name('login');
 
-// -------------------------
-// ADMIN AREA
-// -------------------------
+// ======================================================
+// 🔹 ADMIN AREA (DASHBOARD, CRUD, LOGOUT)
+// ======================================================
 Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->name('admin.')
     ->group(function () {
+
+        // Dashboard utama
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Project
         Route::resource('projects', ProjectController::class);
+
+        // About
         Route::get('/about/edit', [AboutController::class, 'edit'])->name('about.edit');
         Route::put('/about/update', [AboutController::class, 'update'])->name('about.update');
+
+        // Services
         Route::resource('services', ServiceController::class)->except(['show']);
+
+        // News CRUD (tanpa show)
+        Route::resource('news', NewsController::class)->except(['show']);
+
+        // 🔸 Home Section Management (Admin Only)
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
+        Route::post('/home', [HomeController::class, 'update'])->name('home.update');
+        Route::delete('/home/slide/{id}', [HomeController::class, 'deleteSlide'])->name('home.deleteSlide');
+
+        // Logout
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
-
-// -------------------------
-// HOME SECTION
-// -------------------------
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home');
-    Route::post('/admin/home', [HomeController::class, 'update'])->name('admin.home.update');
-    Route::delete('/admin/home/slide/{id}', [HomeController::class, 'deleteSlide'])->name('admin.home.deleteSlide');
-});
